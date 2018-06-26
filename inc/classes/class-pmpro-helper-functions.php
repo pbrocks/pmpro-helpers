@@ -70,10 +70,11 @@ class PMPro_Helper_Functions {
 		echo '<div class="wrap">';
 		echo '<h2>' . __FUNCTION__ . '</h2>';
 
-		echo '<h4>get_pmpro_level_list()</h4>';
-		echo self::get_pmpro_level_list();
-		echo '<h4>get_pmpro_level_dropdown()</h4>';
-		echo self::get_pmpro_level_dropdown();
+		echo '<h4>get_pmpro_levels_list()</h4>';
+		echo self::get_pmpro_levels_list();
+
+		echo '<h4>get_pmpro_levels_dropdown()</h4>';
+		echo self::get_pmpro_levels_dropdown();
 
 		echo '<h4>get_pmpro_member_level()</h4>';
 		$user_id = 1;
@@ -96,6 +97,13 @@ class PMPro_Helper_Functions {
 		print_r( $pmpro_member_object );
 		echo '</pre>';
 
+		echo '<h4>get_pmpro_user_object()</h4>';
+		$user_id = 1;
+		$pmpro_user_object = self::get_pmpro_user_object( $user_id );
+		echo '<pre>$user_id ' . $user_id . ' $pmpro_user_object ';
+		print_r( $pmpro_user_object );
+		echo '</pre>';
+
 		echo '<h4>get_pmpro_member_caps_array()</h4>';
 		$user_id = 1;
 		$pmpro_member_caps_array = self::get_pmpro_member_caps_array( $user_id );
@@ -115,8 +123,8 @@ class PMPro_Helper_Functions {
 		$user_object = new \WP_User( $user_id );
 		$member_data = get_userdata( $user_object->ID );
 		$member_object = pmpro_getMembershipLevelForUser( $member_data->ID );
-		$member_level = $member_object;
-		return $member_level->id;
+		// $member_level = $member_object->id;
+		return $member_object;
 	}
 
 	/**
@@ -182,18 +190,14 @@ class PMPro_Helper_Functions {
 	}
 
 	/**
-	 * Description
+	 * [get_pmpro_user_object description]
 	 *
-	 * @return type
+	 * @param  [type] $user_id [description]
+	 * @return [type]           [description]
 	 */
-	public static function get_pmpro_level_list() {
-		global $pmpro_levels;
-		$pmpro_level_list = '<ul>';
-		foreach ( $pmpro_levels as $key => $value ) {
-			$pmpro_level_list .= '<li>Level ' . $value->id . ' => ' . $value->name . '</li>';
-		}
-		$pmpro_level_list .= '<ul>';
-		return $pmpro_level_list;
+	public static function get_pmpro_user_object( $user_id ) {
+		$user_object = new \WP_User( $user_id );
+		return $user_object;
 	}
 
 	/**
@@ -201,14 +205,32 @@ class PMPro_Helper_Functions {
 	 *
 	 * @return type
 	 */
-	public static function get_pmpro_level_dropdown() {
+	public static function get_pmpro_levels_list() {
 		global $pmpro_levels;
-		$pmpro_level_dropdown = '<select>';
-		foreach ( $pmpro_levels as $key => $value ) {
-			$pmpro_level_dropdown .= '<option value="' . $value->id . '">' . $value->id . ' => ' . $value->name . '</option>';
-		}
-		$pmpro_level_dropdown .= '<select>';
-		return $pmpro_level_dropdown;
+		// $pmpro_level_list = '<ul>';
+		// foreach ( $pmpro_levels as $key => $value ) {
+		// 	$pmpro_level_list .= '<li>Level ' . $value->id . ' => ' . $value->name . '</li>';
+		// }
+		// $pmpro_level_list .= '<ul>';
+		return $pmpro_levels;
+	}
+
+	/**
+	 * Description
+	 *
+	 * @return type
+	 */
+	public static function get_pmpro_levels_dropdown() {
+		global $pmpro_levels;
+		// if ( 1 < count($pmpro_levels)) {
+		// 	$pmpro_level_dropdown = '<select>';
+		// 	foreach ( $pmpro_levels as $key => $value ) {
+		// 		$pmpro_level_dropdown .= '<option value="' . $value->id . '">' . $value->id . ' => ' . $value->name . '</option>';
+		// 	}
+		// 	$pmpro_level_dropdown .= '<select>';
+		// 	return $pmpro_level_dropdown;
+		// }
+		return $pmpro_levels[0];
 	}
 
 }
