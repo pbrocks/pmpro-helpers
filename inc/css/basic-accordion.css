@@ -7,6 +7,10 @@
 #accordion {
     border: 2px solid gray;
 }
+.ui-draggable-handle,
+.ui-sortable-handle {
+    cursor: row-resize;
+}
 .ui-accordion-header {
 	color: #77A020;
 }
