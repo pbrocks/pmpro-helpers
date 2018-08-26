@@ -1,0 +1,21 @@
+#primer-accordion {
+    width: 90%; 
+}
+#primer-accordion p {
+	font-size: 1rem;
+}
+#accordion {
+    border: 2px solid gray;
+}
+.ui-accordion-header {
+	color: #77A020;
+}
+.ui-accordion-header:hover {
+	cursor: pointer;
+}
+.ui-accordion-content.ui-accordion-content-active {
+	background-color: white;
+	padding: 2rem;
+    height: 100%!important;
+    color: #2997c8;
+}

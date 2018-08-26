@@ -23,34 +23,9 @@ class PMPro_Helper_Functions {
 	 * @return [type] [description]
 	 */
 	public static function init() {
-		// add_filter( 'login_redirect', array( __CLASS__, 'pmpro_help_login_redirect' ), 10, 3 );
 		add_action( 'admin_menu', array( __CLASS__, 'pmpro_quick_dashboard_menu' ) );
 	}
 
-	/*
-	Function to redirect member on login to their membership level's homepage
-	*/
-	/**
-	 * [pmpro_help_login_redirect description]
-	 *
-	 * @param  [type] $redirect_to [description]
-	 * @param  [type] $request     [description]
-	 * @param  [type] $user        [description]
-	 * @return [type]              [description]
-	 */
-	public static function pmpro_help_login_redirect( $redirect_to, $request, $user ) {
-		// check level
-		if ( ! empty( $user ) && ! empty( $user->ID ) && function_exists( 'pmpro_getMembershipLevelForUser' ) ) {
-			$level = pmpro_getMembershipLevelForUser( $user->ID );
-			$member_homepage_id = self::pmpromh_getHomepageForLevel( $level->id );
-
-			if ( ! empty( $member_homepage_id ) ) {
-				$redirect_to = get_permalink( $member_homepage_id );
-			}
-		}
-
-		return $redirect_to;
-	}
 	/**
 	 * [pmpro_quick_dashboard_menu description]
 	 *
@@ -70,11 +45,23 @@ class PMPro_Helper_Functions {
 		echo '<div class="wrap">';
 		echo '<h2>' . __FUNCTION__ . '</h2>';
 
-		echo '<h4>get_pmpro_levels_list()</h4>';
-		echo self::get_pmpro_levels_list();
+		echo '<h4>get_pmpro_levels_object()</h4>';
+		echo '<pre>';
+		print_r( self::get_pmpro_levels_object() );
+		echo '</pre>';
+
+		echo '<h4>get_pmpro_levels_array()</h4>';
+		echo '<pre>';
+		print_r( self::get_pmpro_levels_array() );
+		echo '</pre>';
 
 		echo '<h4>get_pmpro_levels_dropdown()</h4>';
 		echo self::get_pmpro_levels_dropdown();
+
+		echo '<h4>get_pmpro_levels_shortlist()</h4>';
+		echo '<pre>';
+		print_r( self::get_pmpro_levels_shortlist() );
+		echo '</pre>';
 
 		echo '<h4>get_pmpro_member_level()</h4>';
 		$user_id = 1;
@@ -111,6 +98,71 @@ class PMPro_Helper_Functions {
 		print_r( $pmpro_member_caps_array );
 		echo '</pre>';
 		echo '</div>';
+	}
+
+
+	/**
+	 * Description
+	 *
+	 * @return type
+	 */
+	public static function get_pmpro_levels_object() {
+		global $wpdb;
+		$existing_levels = $wpdb->get_results(
+			"
+			SELECT * FROM $wpdb->pmpro_membership_levels
+			"
+		);
+		return $existing_levels;
+	}
+
+
+	/**
+	 * Description
+	 *
+	 * @return type
+	 */
+	public static function get_pmpro_levels_array() {
+		$existing_levels = self::get_pmpro_levels_object();
+		foreach ( $existing_levels as $level_key => $level_value ) {
+			foreach ( $level_value as $key => $value ) {
+				$pmpro_level_list[ $level_key ][ $key ] = $value;
+			}
+		}
+		return $pmpro_level_list;
+	}
+
+	/**
+	 * Description
+	 *
+	 * @return type
+	 */
+	public static function get_pmpro_levels_shortlist() {
+		$existing_levels = self::get_pmpro_levels_object();
+		$pmpro_level_list = '<ul>';
+		foreach ( $existing_levels as $key => $value ) {
+			$pmpro_level_list .= '<li>Level ' . $value->id . ' => ' . $value->name . '</li>';
+		}
+		$pmpro_level_list .= '<ul>';
+		return $pmpro_level_list;
+	}
+
+	/**
+	 * Description
+	 *
+	 * @return type
+	 */
+	public static function get_pmpro_levels_dropdown() {
+		global $pmpro_levels;
+		// if ( 1 < count($pmpro_levels)) {
+		// $pmpro_level_dropdown = '<select>';
+		// foreach ( $pmpro_levels as $key => $value ) {
+		// $pmpro_level_dropdown .= '<option value="' . $value->id . '">' . $value->id . ' => ' . $value->name . '</option>';
+		// }
+		// $pmpro_level_dropdown .= '<select>';
+		// return $pmpro_level_dropdown;
+		// }
+		return $pmpro_levels[0];
 	}
 
 	/**
@@ -200,37 +252,5 @@ class PMPro_Helper_Functions {
 		return $user_object;
 	}
 
-	/**
-	 * Description
-	 *
-	 * @return type
-	 */
-	public static function get_pmpro_levels_list() {
-		global $pmpro_levels;
-		// $pmpro_level_list = '<ul>';
-		// foreach ( $pmpro_levels as $key => $value ) {
-		// 	$pmpro_level_list .= '<li>Level ' . $value->id . ' => ' . $value->name . '</li>';
-		// }
-		// $pmpro_level_list .= '<ul>';
-		return $pmpro_levels;
-	}
-
-	/**
-	 * Description
-	 *
-	 * @return type
-	 */
-	public static function get_pmpro_levels_dropdown() {
-		global $pmpro_levels;
-		// if ( 1 < count($pmpro_levels)) {
-		// 	$pmpro_level_dropdown = '<select>';
-		// 	foreach ( $pmpro_levels as $key => $value ) {
-		// 		$pmpro_level_dropdown .= '<option value="' . $value->id . '">' . $value->id . ' => ' . $value->name . '</option>';
-		// 	}
-		// 	$pmpro_level_dropdown .= '<select>';
-		// 	return $pmpro_level_dropdown;
-		// }
-		return $pmpro_levels[0];
-	}
 
 }
