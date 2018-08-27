@@ -39,65 +39,15 @@ class PMPro_Primer {
 	public static function pmpro_primer() {
 		global $this_menu_slug;
 		$this_menu_slug = preg_replace( '/_+/', '-', __FUNCTION__ );
-		$label = ucwords( preg_replace( '/_+/', ' ', __FUNCTION__ ) );
+		// $this_menu_slug = 'pmpro_primer';
+		// $label = ucwords( preg_replace( '/_+/', ' ', __FUNCTION__ ) );
+		$label = 'PMPro Primer';
 		// $pmpro_primer_screen = add_submenu_page( __( 'pmpro-membershiplevels', $label, 'pmpro-primer-menu' ), __( $label, 'pmpro-primer-menu' ), 'manage_options', $this_menu_slug . '.php', array( __CLASS__, 'pmpro_primer_page' ) );
 		$pmpro_primer_screen = add_dashboard_page( __( $label, 'pmpro-primer-menu' ), __( $label, 'pmpro-primer-menu' ), 'manage_options', $this_menu_slug . '.php', array( __CLASS__, 'pmpro_primer_page' ) );
 		// Adds my_help_tab when primer_page loads
 		add_action( 'load-' . $pmpro_primer_screen, array( __CLASS__, 'add_primer_help_tab' ) );
 	}
 
-	public static function add_primer_help_tab() {
-		$screen = get_current_screen();
-		$help_1_id = 'using_pmpro_array';
-		$help_1_title = ucwords( preg_replace( '/_+/', ' ', $help_1_id ) );
-		$sample_output = self::get_sample_pmpro_levels_code();
-		$sample_description = 'This is a quick sample of what you can do with the code on this page. Copy and paste this into your code to see how it works.';
-		$screen->add_help_tab(
-			array(
-				'id'    => $help_1_id,
-				'title' => __( $help_1_title ),
-				'content'   => '<h4>' . __( $help_1_title ) . '</h4>' .
-				'<p class="description">' . esc_html( $sample_description ) .
-				'</p>' .
-				'<xmp>
-	$array = get_pmpro_levels_array();
-	foreach ( $array as $key => $value ) {
-		echo \'Level \' . $value[\'id\'] . \' is \' . $value[\'name\'] . \' costs $\' . $value[\'billing_amount\'] . \' <br> \';
-	}
-		</xmp>
-		' . 'Returns this: <p>' . $sample_output . '</p>',
-			)
-		);
-		$screen->add_help_tab(
-			array(
-				'id'    => 'primer_help_2',
-				'title' => __( 'Primer Help 2' ),
-				'content'   => '<p>' . __( 'Descriptive content that will show in My Help Tab-body goes here.' ) . '</p>',
-			)
-		);
-		$screen->add_help_tab(
-			array(
-				'id'    => 'primer_help_3',
-				'title' => __( 'Primer Help 3' ),
-				'content'   => '<p>' . __( 'Descriptive content that will show in My Help Tab-body goes here.' ) . '</p>',
-			)
-		);
-	}
-
-	public static function pmpro_primer_enqueue() {
-		wp_register_script(
-			'basic-accordion',
-			plugins_url( '/js/basic-accordion.js', dirname( __FILE__ ) ),
-			array( 'jquery', 'jquery-ui-accordion' )
-		);
-		wp_register_style(
-			'basic-accordion',
-			plugins_url( '/css/basic-accordion.css', dirname( __FILE__ ) ),
-			time()
-		);
-		wp_enqueue_style( 'basic-accordion' );
-		wp_enqueue_script( 'basic-accordion' );
-	}
 	/**
 	 * Debug Information
 	 *
@@ -171,6 +121,60 @@ return $existing_levels;
 		echo '</div>
 		</div>';
 	}
+
+	public static function add_primer_help_tab() {
+		$screen = get_current_screen();
+		$help_1_id = 'using_pmpro_array';
+		$help_1_title = ucwords( preg_replace( '/_+/', ' ', $help_1_id ) );
+		$sample_output = self::get_sample_pmpro_levels_code();
+		$sample_description = 'This is a quick sample of what you can do with the code on this page. Copy and paste this into your code to see how it works.';
+		$screen->add_help_tab(
+			array(
+				'id'    => $help_1_id,
+				'title' => __( $help_1_title ),
+				'content'   => '<h4>' . __( $help_1_title ) . '</h4>' .
+				'<p class="description">' . esc_html( $sample_description ) .
+				'</p>' .
+				'<xmp>
+	$array = get_pmpro_levels_array();
+	foreach ( $array as $key => $value ) {
+		echo \'Level \' . $value[\'id\'] . \' is \' . $value[\'name\'] . \' costs $\' . $value[\'billing_amount\'] . \' <br> \';
+	}
+		</xmp>
+		' . 'Returns this: <p>' . $sample_output . '</p>',
+			)
+		);
+		$screen->add_help_tab(
+			array(
+				'id'    => 'primer_help_2',
+				'title' => __( 'Primer Help 2' ),
+				'content'   => '<p>' . __( 'Descriptive content that will show in My Help Tab-body goes here.' ) . '</p>',
+			)
+		);
+		$screen->add_help_tab(
+			array(
+				'id'    => 'primer_help_3',
+				'title' => __( 'Primer Help 3' ),
+				'content'   => '<p>' . __( 'Descriptive content that will show in My Help Tab-body goes here.' ) . '</p>',
+			)
+		);
+	}
+
+	public static function pmpro_primer_enqueue() {
+		wp_register_script(
+			'basic-accordion',
+			plugins_url( '/js/basic-accordion.js', dirname( __FILE__ ) ),
+			array( 'jquery', 'jquery-ui-accordion' )
+		);
+		wp_register_style(
+			'basic-accordion',
+			plugins_url( '/css/basic-accordion.css', dirname( __FILE__ ) ),
+			time()
+		);
+		wp_enqueue_style( 'basic-accordion' );
+		wp_enqueue_script( 'basic-accordion' );
+	}
+
 	/**
 	 * Description
 	 *
