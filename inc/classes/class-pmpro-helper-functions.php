@@ -45,6 +45,11 @@ class PMPro_Helper_Functions {
 		echo '<div class="wrap">';
 		echo '<h2>' . __FUNCTION__ . '</h2>';
 
+		echo '<h4>pmpro_primer_levels_dropdown()</h4>';
+		echo '<pre>';
+		print_r( self::pmpro_primer_levels_dropdown() );
+		echo '</pre>';
+
 		echo '<h4>get_pmpro_levels_object()</h4>';
 		echo '<pre>';
 		print_r( self::get_pmpro_levels_object() );
@@ -253,4 +258,25 @@ class PMPro_Helper_Functions {
 	}
 
 
+	public static function pmpro_primer_levels_dropdown() {
+		?>
+		<select name="level" id="pmpro-sortable-members-levels">
+			<option value="active" <?php selected( '', $level ); ?>><?php _e( 'Active Members', 'pmpro' ); ?></option>
+			<option value="all" <?php selected( $level, 'all' ); ?>><?php _e( 'All Members', 'pmpro' ); ?></option>
+			<?php
+
+			$list = pmpro_getAllLevels( true, true );
+
+			foreach ( $list as $item ) {
+				?>
+				<option value="<?php esc_attr_e( $item->id ); ?>" <?php selected( $level, $item->id ); ?>><?php esc_attr_e( $item->name ); ?></option>
+				<?php
+			}
+			?>
+			<option value="cancelled" <?php selected( $level, 'cancelled' ); ?>><?php _e( 'Cancelled Members', 'pmpro' ); ?></option>
+			<option value="expired" <?php selected( $level, 'expired' ); ?>><?php _e( 'Expired Members', 'pmpro' ); ?></option>
+			<option value="oldmembers" <?php selected( $level, 'oldmembers' ); ?>><?php _e( 'Old Members', 'pmpro' ); ?></option>
+		</select>
+		<?php
+	}
 }
