@@ -187,7 +187,14 @@ class PMPro_Tabbed_Settings {
 
 	public static function beta_diagnostic_message() {
 		global $current_user;
-		echo '<div id="lpv-head"><div>$_GET <pre>';
+		?>
+		<style type="text/css">
+			#admin-footer {
+				margin-left: 12rem;
+			}
+		</style>
+		<?php
+		echo '<div id="admin-footer"><div>$_GET <pre>';
 		print_r( $_GET );
 		echo '</pre></div>';
 		echo '<div>$_REQUEST <pre>';
