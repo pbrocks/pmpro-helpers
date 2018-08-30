@@ -18,14 +18,16 @@ defined( 'ABSPATH' ) || die( 'File cannot be accessed directly' );
  */
 class PMPro_Beta_Menu {
 	/**
-	 * [init description]
+	 * [init description] register_form
+	 * pmpro_add_member_added
 	 *
-	 * @return [type] [description]
+	 * @return [type] [description] pmprorh_register_form
 	 */
 	public static function init() {
 		add_action( 'admin_menu', array( __CLASS__, 'pmpro_beta' ) );
 		add_action( 'init', array( __CLASS__, 'beta_admin_init' ) );
 		add_action( 'admin_footer', array( __CLASS__, 'beta_diagnostic_message' ) );
+		add_action( 'pmpro_add_member_added', array( __CLASS__, 'pmpro_add_forum_role' ), 11 );
 		add_filter( 'pmpro_beta_title', array( __CLASS__, 'pmpro_change_menu_name' ), 10, 3 );
 	}
 
@@ -97,15 +99,21 @@ class PMPro_Beta_Menu {
 	}
 
 	public static function pmpro_beta() {
-		$page_title = 'PMPro Beta Menus';
-		$menu_title = 'PMPro Beta';
-		$capability = 'manage_options';
-		$menu_slug = 'pmpro-beta-menu.php';
+		$labels = self::pmpro_beta_menu_labels();
+		$page_title = $labels['page_title'];
+		$menu_title = $labels['menu_title'];
+		$capability = $labels['capability'];
+		$menu_slug = $labels['menu_slug'];
 		$function = array( __CLASS__, 'pmpro_beta_page' );
 		$icon_url = 'dashicons-groups';
 		$position = 20;
+		$num_submenus = 3;
 		add_menu_page( $page_title, $menu_title, $capability, $menu_slug, $function, $icon_url, $position );
-		add_submenu_page( $menu_slug, $page_title, 'PMPro Beta 1', $capability, 'pmpro-beta-menu-1.php', array( __CLASS__, 'pmpro_beta_page_1' ) );
+		$x = 0;
+		while ( $x < $num_submenus ) {
+			$x++;
+			add_submenu_page( $menu_slug, $page_title, 'PMPro Beta ' . $x, $capability, 'pmpro-beta-menu-' . $x . '.php', array( __CLASS__, 'pmpro_beta_page_' . $x ) );
+		}
 
 		// $submenus = 3;
 		// $x = 1;
@@ -128,6 +136,40 @@ class PMPro_Beta_Menu {
 		add_submenu_page( $slug . '.php', __( $pmpro_beta_title . ' Sub 2', 'paid-memberships-pro' ), __( $pmpro_beta_title . ' Sub 2', 'paid-memberships-pro' ), 'manage_options', array( __CLASS__, 'pmpro_beta_submenu_2' ) );
 		// add_submenu_page( $slug . '.php', __( 'Page Settings', 'paid-memberships-pro' ), __( 'Page Settings', 'paid-memberships-pro' ), 'manage_options', array( __CLASS__, 'pmpro_beta_page' ) );
 		// add_action( "load-{$beta_dash}", 'beta_tabbed_settings' );
+		// $beta_menu_filter = apply_filters(
+		// 'beta_menu_filter',
+		// add_submenu_page( $slug . '.php', __( $pmpro_beta_title . ' Sub 3', 'paid-memberships-pro' ), __( $pmpro_beta_title . ' Sub 3', 'paid-memberships-pro' ), 'manage_options', array( __CLASS__, 'pmpro_beta_submenu_2' ) )
+		// );
+	}
+	public static function pmpro_beta_menu_labels() {
+		$return['page_title'] = 'PMPro Beta Menus';
+		$return['menu_title'] = 'PMPro Beta';
+		$return['capability'] = 'manage_options';
+		$return['menu_slug'] = 'pmpro-beta-menu.php';
+		return $return;
+	}
+
+
+	public static function pmpro_add_forum_role( $user_id ) {
+		$user_role = 'subscriber';
+		$bbp_role = 'bbp_participant';
+
+		if ( is_wp_error( $user_id ) ) {
+			echo $return->get_error_message();
+		}
+
+		if ( ! empty( $_POST['role'] ) ) {
+			$user_role = $_POST['role'];
+		}
+		if ( ! empty( $_POST['bbp-forums-role'] ) ) {
+			$bbp_role = $_POST['bbp-forums-role'];
+		}
+		// $capabilities_item[] = $bbp_role;
+		$capabilities_array = array(
+			$user_role       => true,
+			$bbp_role        => true,
+		);
+		$updated_roles = update_user_meta( $user_id, 'wp_capabilities', $capabilities_array );
 	}
 
 
@@ -182,6 +224,7 @@ class PMPro_Beta_Menu {
 		$screen = get_current_screen();
 		echo '<h4 style="color:rgba(250,128,114,.7);">Current Screen is <span style="color:rgba(250,128,114,1);">' . $screen->id . '</span></h4>';
 		echo '<h2>' . __FUNCTION__ . '</h2>';
+
 		echo '</div>';
 	}
 
@@ -192,6 +235,7 @@ class PMPro_Beta_Menu {
 		$screen = get_current_screen();
 		echo '<h4 style="color:rgba(250,128,114,.7);">Current Screen is <span style="color:rgba(250,128,114,1);">' . $screen->id . '</span></h4>';
 		echo '<h2>' . __FUNCTION__ . '</h2>';
+
 		echo '</div>';
 	}
 
@@ -253,9 +297,27 @@ class PMPro_Beta_Menu {
 		$updated = update_option( 'beta_tabbed_settings', $beta_settings );
 	}
 
-	public static function beta_diagnostic_message() {
+	public static function beta_diagnostic_message( $user ) {
 		global $current_user;
 		echo '<div id="footer-diagnostic"><div></div><div>$_GET <pre>';
+		echo '$current_user ' . $current_user->ID . '<br>';
+		if ( ! empty( $_REQUEST['user'] ) ) {
+			$user_id = intval( $_REQUEST['user'] );
+			$user = get_userdata( $user_id );
+			if ( empty( $user->ID ) ) {
+				$user_id = false;
+			}
+		} else {
+			$user = get_userdata( 0 );
+		}
+
+		if ( isset( $user->ID ) ) {
+			echo '$user->ID  ' . $user->ID . '<br>';
+		} elseif ( isset( $user_id ) ) {
+			echo '$user_id ' . $user_id . '<br>';
+		} else {
+			echo 'wtf';
+		}
 		print_r( $_GET );
 		echo '</pre></div>';
 		echo '<div>$_REQUEST <pre>';
@@ -263,9 +325,6 @@ class PMPro_Beta_Menu {
 		echo '</pre></div>';
 		echo '<div>$_POST <pre>';
 		print_r( $_POST );
-		add_action( 'template_redirect', 'pmpromc_processSubscriptions', 1 );
-		add_filter( 'wp_redirect', 'pmpromc_processSubscriptions', 99 );
-		add_action( 'pmpro_membership_post_membership_expiry', 'pmpromc_processUnsubscriptions' );
 		echo '</pre></div><div class="full">';
 		echo __FUNCTION__;
 		echo '<br>Line ' . __LINE__ . '</div></div>';
@@ -421,6 +480,24 @@ class PMPro_Beta_Menu {
 	 * @return [type] [description]
 	 */
 	public static function pmpro_beta_submenu_2() {
+		echo __FUNCTION__;
+	}
+	/**
+	 * [pmpro_beta_home description]
+	 * PMPro_Helpers\inc\classes\PMPro_Primer\pmpro_primer_page();
+	 *
+	 * @return [type] [description]
+	 */
+	public static function pmpro_beta_submenu_3() {
+		echo __FUNCTION__;
+	}
+	/**
+	 * [pmpro_beta_home description]
+	 * PMPro_Helpers\inc\classes\PMPro_Primer\pmpro_primer_page();
+	 *
+	 * @return [type] [description]
+	 */
+	public static function pmpro_beta_submenu_4() {
 		echo __FUNCTION__;
 	}
 }
