@@ -23,3 +23,23 @@
     height: 100%!important;
     color: #2997c8;
 }
+#toplevel_page_pmpro-beta-menu > .menu-top.toplevel_page_pmpro-beta-menu,
+#toplevel_page_pmpro-beta > .menu-top.toplevel_page_pmpro-beta {
+	color: gold;
+}
+.tab-content-wrapper {
+	background: aliceblue;
+	padding: 1rem;
+}
+/* === dev === */
+#footer-diagnostic {
+	display: grid;
+	grid-template-columns: 20% 1fr 1fr 1fr;
+}
+#footer-diagnostic .full {
+	grid-column: 1 / -1;
+    text-align: center;
+}
+#toplevel_page_pmpro-beta  .xdebug-error.xe-warning {
+	margin-left: 12rem;
+}
