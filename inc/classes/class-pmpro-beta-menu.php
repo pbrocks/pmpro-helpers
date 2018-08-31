@@ -105,7 +105,7 @@ class PMPro_Beta_Menu {
 		$icon_url = 'dashicons-groups';
 		$position = 20;
 		add_menu_page( $page_title, $menu_title, $capability, $menu_slug, $function, $icon_url, $position );
-		add_submenu_page( $menu_slug, $page_title, 'PMPro Beta 1', $capability, 'pmpro-beta-menu-1.php', array( __CLASS__, 'pmpro_beta_page_1' ) );
+		add_submenu_page( $menu_slug, $page_title, 'PMPro Settings', $capability, 'pmpro-beta-settings.php', array( __CLASS__, 'pmpro_beta_settings' ) );
 
 		// $submenus = 3;
 		// $x = 1;
@@ -172,16 +172,19 @@ class PMPro_Beta_Menu {
 		$screen = get_current_screen();
 		echo '<h4 style="color:rgba(250,128,114,.7);">Current Screen is <span style="color:rgba(250,128,114,1);">' . $screen->id . '</span></h4>';
 
+		include( PMPRO_DIR . '/adminpages/membershiplevels.php' );
 		echo '</div>';
 	}
 
-	public static function pmpro_beta_page_1() {
+	public static function pmpro_beta_settings() {
 		global $pmpro_levels;
 		echo '<div class="wrap">';
 		echo '<h2>' . ucwords( preg_replace( '/_+/', ' ', __FUNCTION__ ) ) . '</h2>';
 		$screen = get_current_screen();
 		echo '<h4 style="color:rgba(250,128,114,.7);">Current Screen is <span style="color:rgba(250,128,114,1);">' . $screen->id . '</span></h4>';
 		echo '<h2>' . __FUNCTION__ . '</h2>';
+
+		include( PMPRO_DIR . '/adminpages/pagesettings.php' );
 		echo '</div>';
 	}
 
