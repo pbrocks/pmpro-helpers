@@ -112,7 +112,7 @@ class PMPro_Beta_Menu {
 		$x = 0;
 		while ( $x < $num_submenus ) {
 			$x++;
-			add_submenu_page( $menu_slug, $page_title, 'PMPro Beta ' . $x, $capability, 'pmpro-beta-menu-' . $x . '.php', array( __CLASS__, 'pmpro_beta_page_' . $x ) );
+			add_submenu_page( $menu_slug, __( $page_title, 'pmpro-helpers' ), __( 'PMPro Beta ' . $x, 'pmpro-helpers' ), $capability, __( 'pmpro-beta-menu-' . $x . '.php', 'pmpro-helpers' ), array( __CLASS__, 'pmpro_beta_page_' . $x ) );
 		}
 
 		// $submenus = 3;
@@ -185,7 +185,7 @@ class PMPro_Beta_Menu {
 	public static function pmpro_beta_page1() {
 		global $pmpro_levels;
 		echo '<div class="wrap">';
-		echo '<h2>' . ucwords( preg_replace( '/_+/', ' ', __FUNCTION__ ) ) . '</h2>';
+		echo '<h2>' . __( ucwords( preg_replace( '/_+/', ' ', __FUNCTION__ ) ), 'pmpro-helpers' ) . '</h2>';
 		$screen = get_current_screen();
 		echo '<h4 style="color:rgba(250,128,114,.7);">Current Screen is <span style="color:rgba(250,128,114,1);">' . $screen->id . '</span></h4>';
 
@@ -214,16 +214,20 @@ class PMPro_Beta_Menu {
 		$screen = get_current_screen();
 		echo '<h4 style="color:rgba(250,128,114,.7);">Current Screen is <span style="color:rgba(250,128,114,1);">' . $screen->id . '</span></h4>';
 
+		echo '<p>' . PMPRO_DIR . '/adminpages/membershiplevels.php';
+		include PMPRO_DIR . '/adminpages/membershiplevels.php';
 		echo '</div>';
 	}
 
 	public static function pmpro_beta_page_1() {
 		global $pmpro_levels;
 		echo '<div class="wrap">';
-		echo '<h2>' . ucwords( preg_replace( '/_+/', ' ', __FUNCTION__ ) ) . '</h2>';
+		echo '<h2>' . __( ucwords( preg_replace( '/_+/', ' ', __FUNCTION__ ) ), 'pmpro-helpers' ) . '</h2>';
 		$screen = get_current_screen();
 		echo '<h4 style="color:rgba(250,128,114,.7);">Current Screen is <span style="color:rgba(250,128,114,1);">' . $screen->id . '</span></h4>';
-		echo '<h2>' . __FUNCTION__ . '</h2>';
+		echo '<h2>' . __( __FUNCTION__, 'pmpro-helpers' ) . '</h2>';
+		echo '<p>' . PMPRO_DIR . '/adminpages/membershiplevels.php';
+		include PMPRO_DIR . '/adminpages/membershiplevels.php';
 
 		echo '</div>';
 	}
@@ -231,7 +235,7 @@ class PMPro_Beta_Menu {
 	public static function pmpro_beta_page_2() {
 		global $pmpro_levels;
 		echo '<div class="wrap">';
-		echo '<h2>' . ucwords( preg_replace( '/_+/', ' ', __FUNCTION__ ) ) . '</h2>';
+		echo '<h2>' . __( ucwords( preg_replace( '/_+/', ' ', __FUNCTION__ ) ), 'pmpro-helpers' ) . '</h2>';
 		$screen = get_current_screen();
 		echo '<h4 style="color:rgba(250,128,114,.7);">Current Screen is <span style="color:rgba(250,128,114,1);">' . $screen->id . '</span></h4>';
 		echo '<h2>' . __FUNCTION__ . '</h2>';
@@ -242,7 +246,7 @@ class PMPro_Beta_Menu {
 	public static function pmpro_beta_page_3() {
 		global $pmpro_levels;
 		echo '<div class="wrap">';
-		echo '<h2>' . ucwords( preg_replace( '/_+/', ' ', __FUNCTION__ ) ) . '</h2>';
+		echo '<h2>' . __( ucwords( preg_replace( '/_+/', ' ', __FUNCTION__ ) ), 'pmpro-helpers' ) . '</h2>';
 		$screen = get_current_screen();
 		echo '<h4 style="color:rgba(250,128,114,.7);">Current Screen is <span style="color:rgba(250,128,114,1);">' . $screen->id . '</span></h4>';
 		echo '<h2>' . __FUNCTION__ . '</h2>';

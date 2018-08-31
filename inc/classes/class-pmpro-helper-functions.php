@@ -32,7 +32,7 @@ class PMPro_Helper_Functions {
 	 * @return [type] [description]
 	 */
 	public static function pmpro_quick_dashboard_menu() {
-		add_dashboard_page( __( 'PMPro Helpers', 'pmpro-customizer' ), __( 'PMPro Helpers', 'pmpro-customizer' ), 'manage_options', 'pmpro-helper-dash.php', array( __CLASS__, 'pmpro_helper_dashboard_page' ) );
+		add_dashboard_page( __( 'PMPro Helpers', 'pmpro-helpers' ), __( 'PMPro Helpers', 'pmpro-helpers' ), 'manage_options', 'pmpro-helper-dash.php', array( __CLASS__, 'pmpro_helper_dashboard_page' ) );
 	}
 
 	/**

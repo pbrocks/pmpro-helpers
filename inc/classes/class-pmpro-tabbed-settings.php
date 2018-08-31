@@ -301,13 +301,6 @@ class PMPro_Tabbed_Settings {
 						<tr>
 							<th><label for="beta_code">Insert tracking code:</label></th>
 							<td>
-								<?php echo self::pmpro_beta_demo_primer() . '<br>'; ?>
-								<?php
-								/*
-								echo PMPro_Primer\pmpro_primer()
-								*/
-								echo 'deleted PMPro_Primer\pmpro_primer()<br>';
-								?>
 								<textarea id="beta_code" name="beta_code" cols="60" rows="5"><?php echo esc_html( stripslashes( $beta_settings['beta_code'] ) ); ?></textarea><br/>
 								<span class="description">Enter your Google Analytics tracking code:</span>
 							</td>
