@@ -18,6 +18,7 @@ defined( 'ABSPATH' ) || die( 'File cannot be accessed directly' );
  * @return type Words
  */
 require_once( 'autoload.php' );
+inc\classes\PMPro_Addon_Adjustments::init();
 inc\classes\PMPro_Beta_Menu::init();
 inc\classes\PMPro_Beta_Temp::init();
 inc\classes\PMPro_Helper_Functions::init();
