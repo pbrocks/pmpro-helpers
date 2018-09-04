@@ -36,6 +36,11 @@ class PMPro_Addon_Adjustments {
 			remove_action( 'wp_enqueue_scripts', 'pmpro_advanced_levels_register_styles' );
 			add_action( 'wp_enqueue_scripts', array( __CLASS__, 'pmpro_advanced_levels_new_styles' ) );
 		}
+
+		if ( function_exists( 'pmproama_load_plugin_textdomain' ) ) {
+			remove_action( 'admin_menu', 'pmproama_pmpro_add_pages' );
+			add_action( 'admin_menu', 'pmproama_pmpro_add_pages', 15 );
+		}
 	}
 
 	public static function pmpro_advanced_levels_new_styles() {
