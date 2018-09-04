@@ -25,7 +25,7 @@ class PMPro_Beta_Temp {
 	public static function init() {
 		// add_action( 'admin_menu', array( __CLASS__, 'pmpro_primer' ) );
 		// add_action( 'admin_enqueue_scripts', array( __CLASS__, 'pmpro_primer_enqueue' ) );
-		add_filter( 'gettext', array( __CLASS__, 'gettext_pmpro_checkout_city_state_postcode' ), 10, 3 );
+		add_filter( 'gettext', array( __CLASS__, 'gettext_pmpro_checkout_city_state_postcode' ), 15, 3 );
 		// add_filter( 'pmpro_menu_title', array( __CLASS__, 'pmpro_change_menu_name' ) );
 	}
 
@@ -40,18 +40,30 @@ class PMPro_Beta_Temp {
 	 */
 	public static function gettext_pmpro_checkout_city_state_postcode( $translated_text, $original_text, $domain ) {
 		if ( $domain == 'pmpro-helpers' ) {
-			if ( $translated_text == 'Pmpro Beta Page' ) {
-				$translated_text = 'Yeah, Mutha';
-			}
 			if ( $translated_text == 'PMPro Beta 1' ) {
-				$translated_text = 'Yeah, Mutha';
+				$translated_text = 'PMPro Settings';
 			}
-			if ( $translated_text == 'pmpro_beta_page_1' ) {
+			if ( $translated_text == 'Pmpro Beta Page 1' ) {
+				$translated_text = 'PMPro Settings Page';
+			}
+			if ( $translated_text == 'PMPro Beta 2' ) {
+				$translated_text = 'Add-On Settings';
+			}
+			if ( $translated_text == 'Pmpro Beta Page 2' ) {
+				$translated_text = 'Add-On Settings Page';
+			}
+			if ( $translated_text == 'PMPro Beta 3' ) {
+				$translated_text = 'Yeah, three';
+			}
+			if ( $translated_text == 'Pmpro Beta Page 3' ) {
+				$translated_text = 'Settings Page Three';
+			}
+			if ( $translated_text == 'pmpro_beta_page_1' || $translated_text == 'pmpro_beta_page_2' ) {
 				$translated_text = 'PMPro Beta name change done here ' . basename( __FILE__ ) . __LINE__;
 			}
-			if ( $translated_text == 'Pmpro Beta Page 1' || $translated_text == 'Zipcode' ) {
-				$translated_text = 'Post Code';
-			}
+			// if ( $translated_text == 'Pmpro Beta Page 1' || $translated_text == 'Pmpro Beta Page 2' ) {
+			// $translated_text = 'Post Code';
+			// }
 		}
 		return $translated_text;
 	}

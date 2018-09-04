@@ -25,6 +25,7 @@ class PMPro_Beta_Menu {
 	 */
 	public static function init() {
 		add_action( 'admin_menu', array( __CLASS__, 'pmpro_beta' ) );
+		add_action( 'admin_init', array( __CLASS__, 'beta_save_theme_settings' ) );
 		add_action( 'init', array( __CLASS__, 'beta_admin_init' ) );
 		add_action( 'admin_footer', array( __CLASS__, 'beta_diagnostic_message' ) );
 		add_action( 'pmpro_add_member_added', array( __CLASS__, 'pmpro_add_forum_role' ), 11 );
@@ -39,7 +40,7 @@ class PMPro_Beta_Menu {
 	public static function pmpro_change_menu_name() {
 		$pmpro_menu_title = 'Memberships';
 		$pmpro_menu_title = 'PMPro Admin';
-		$pmpro_menu_title = 'PMPro Beta';
+		$pmpro_menu_title = 'PMPro Levels';
 		return $pmpro_menu_title;
 	}
 
@@ -173,44 +174,10 @@ class PMPro_Beta_Menu {
 	}
 
 
-	/**
-	 * Debug Information
-	 *
-	 * @since 1.0.0
-	 *
-	 * @param bool $html Optional. Return as HTML or not
-	 *
-	 * @return string
-	 */
-	public static function pmpro_beta_page1() {
-		global $pmpro_levels;
-		echo '<div class="wrap">';
-		echo '<h2>' . __( ucwords( preg_replace( '/_+/', ' ', __FUNCTION__ ) ), 'pmpro-helpers' ) . '</h2>';
-		$screen = get_current_screen();
-		echo '<h4 style="color:rgba(250,128,114,.7);">Current Screen is <span style="color:rgba(250,128,114,1);">' . $screen->id . '</span></h4>';
-
-		// Let's grab the tabs that we created in the `tabbed-settings.php`
-		// beta_admin_tabs( $current = 'homepage' );
-		// self::beta_tabbed_settings();
-		$this_theme = wp_get_theme();
-		echo '<h4>Theme is ' . sprintf(
-			__( '%1$s and is version %2$s', 'text-domain' ),
-			$this_theme->get( 'Name' ),
-			$this_theme->get( 'Version' )
-		) . '</h4>';
-		echo '<h4>Templates found in ' . get_template_directory() . '</h4>';
-		echo '<h4>Stylesheet found in ' . get_stylesheet_directory() . '</h4>';
-
-		echo '<pre>';
-		print_r( $pmpro_levels );
-		echo '</pre>';
-		echo '</div>';
-	}
-
 	public static function pmpro_beta_page() {
 		global $pmpro_levels;
 		echo '<div class="wrap">';
-		echo '<h2>' . ucwords( preg_replace( '/_+/', ' ', __FUNCTION__ ) ) . '</h2>';
+		echo '<h2>' . __( ucwords( preg_replace( '/_+/', ' ', __FUNCTION__ ) ), 'pmpro-helpers' ) . '</h2>';
 		$screen = get_current_screen();
 		echo '<h4 style="color:rgba(250,128,114,.7);">Current Screen is <span style="color:rgba(250,128,114,1);">' . $screen->id . '</span></h4>';
 
@@ -239,7 +206,7 @@ class PMPro_Beta_Menu {
 		$screen = get_current_screen();
 		echo '<h4 style="color:rgba(250,128,114,.7);">Current Screen is <span style="color:rgba(250,128,114,1);">' . $screen->id . '</span></h4>';
 		echo '<h2>' . __FUNCTION__ . '</h2>';
-
+		\PMPro_Helpers\inc\classes\PMPro_Tabbed_Settings::pmpro_tabbed_settings_page();
 		echo '</div>';
 	}
 
@@ -250,6 +217,9 @@ class PMPro_Beta_Menu {
 		$screen = get_current_screen();
 		echo '<h4 style="color:rgba(250,128,114,.7);">Current Screen is <span style="color:rgba(250,128,114,1);">' . $screen->id . '</span></h4>';
 		echo '<h2>' . __FUNCTION__ . '</h2>';
+		$hook = 'pmpro-beta_page_pmpro-beta-menu-3';
+		$tabs_page = 'pmpro-beta-menu-3.php';
+		self::beta_tabbed_page_settings( $tabs_page );
 		echo '</div>';
 	}
 
@@ -266,10 +236,10 @@ class PMPro_Beta_Menu {
 	}
 
 
-	public static function beta_save_theme_settings() {
+	public static function beta_save_theme_settings( $tabs_page ) {
 		global $pagenow;
 		$beta_settings = get_option( 'beta_tabbed_settings' );
-		if ( $pagenow == 'admin.php' && $_GET['page'] == 'pmpro-beta.php' ) {
+		if ( $pagenow == 'admin.php' && $_GET['page'] == $tabs_page ) {
 			if ( isset( $_GET['tab'] ) ) {
 				$tab = $_GET['tab'];
 			} else {
@@ -339,38 +309,34 @@ class PMPro_Beta_Menu {
 		// }
 	}
 
-
-
-
-	public static function beta_admin_tabs( $current = 'homepage' ) {
-		$tabs = array(
+	public static function beta_admin_tabs( $tabs_page, $current = 'homepage' ) {
+		$tabs_array = array(
 			'homepage' => 'Home',
-			'general' => 'General',
+			'general'  => 'General',
 			'settings' => 'Settings',
-			'footer' => 'Primer',
+			'footer'   => 'Primer',
 		);
 		$links = array();
 		echo '<div id="icon-themes" class="icon32"><br></div>';
 		echo '<h2 class="nav-tab-wrapper">';
-		foreach ( $tabs as $tab => $name ) {
-			$class = ( $tab == $current ) ? ' nav-tab-active' : '';
-			echo "<a class='nav-tab$class' href='?page=pmpro-beta.php&tab=$tab'>$name</a>";
+		foreach ( $tabs_array as $tab_key => $name ) {
+			$class = ( $tab_key == $current ) ? ' nav-tab-active' : '';
+			echo "<a class='nav-tab$class' href='?page=$tabs_page&tab=$tab_key'>$name</a>";
 
 		}
 		echo '</h2>';
 	}
-
-	public static function beta_tabbed_settings() {
+	// ( ! ) Notice: Undefined index: updated in /app/public/wp-content/plugins/pmpro-helpers/inc/classes/class-pmpro-beta-menu.php on line 332
+	public static function beta_tabbed_page_settings( $tabs_page ) {
 		global $pagenow;
 		$beta_settings = get_option( 'beta_tabbed_settings' );
-		if ( 'true' == esc_attr( $_GET['updated'] ) ) {
-			echo '<div class="updated" ><p> Settings updated.</p></div>';
-		}
-
+		// if ( 'true' == esc_attr( $_GET['updated'] ) ) {
+		// echo '<div class="updated" ><p> Settings updated.</p></div>';
+		// }
 		if ( isset( $_GET['tab'] ) ) {
-			self::beta_admin_tabs( $_GET['tab'] );
+			self::beta_admin_tabs( $tabs_page, $_GET['tab'] );
 		} else {
-			self::beta_admin_tabs( 'homepage' );
+			self::beta_admin_tabs( $tabs_page, 'homepage' );
 		}
 		?>
 <style type="text/css">
@@ -380,10 +346,10 @@ class PMPro_Beta_Menu {
 </style>
 <div id="poststuff">
 	<div class="tab-content-wrapper">
-		<form method="post" action="<?php admin_url( 'admin.php?page=pmpro-beta.php' ); ?>">
+		<form method="post" action="<?php admin_url( 'admin.php?page=' . $tabs_page ); ?>">
 			<?php
 			// wp_nonce_field( 'beta-settings-page' );
-			if ( $pagenow == 'admin.php' && $_GET['page'] == 'pmpro-beta.php' ) {
+			if ( $pagenow == 'admin.php' && $_GET['page'] == $tabs_page ) {
 
 				if ( isset( $_GET['tab'] ) ) {
 					$tab = $_GET['tab'];
@@ -435,7 +401,7 @@ class PMPro_Beta_Menu {
 						<tr>
 							<th><label for="beta_intro"><?php echo $tab; ?></label></th>
 							<td>
-								<?php echo self::pmpro_beta_home(); ?>
+								<?php echo self::pmpro_beta_home() . '<br>'; ?>
 
 								<textarea id="beta_intro" name="beta_intro" cols="60" rows="5" ><?php echo esc_html( stripslashes( $beta_settings['beta_intro'] ) ); ?></textarea><br/>
 								<span class="description">Enter the introductory text for the home page:</span>
@@ -494,6 +460,7 @@ class PMPro_Beta_Menu {
 	 */
 	public static function pmpro_beta_submenu_3() {
 		echo __FUNCTION__;
+
 	}
 	/**
 	 * [pmpro_beta_home description]
