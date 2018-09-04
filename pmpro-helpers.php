@@ -1,11 +1,11 @@
 <?php
 /**
  * Plugin Name: PMPro Helpers
- * Plugin URI: https://bitbucket.org/pbrocks/
- * Description: Helpful Paid Memberships Pro functions housed in namespaced classes
- * Version: 0.1.3
+ * Plugin URI: https://github.com/pbrocks/pmpro-helpers
+ * Description: Helpful Paid Memberships Pro functions housed in namespaced classes as a place for testing and inspiring PMPro development.
+ * Version: 0.1.4
  * Author: pbrocks
- * Author URI: https://bitbucket.org/pbrocks/
+ * Author URI: https://github.com/pbrocks/pmpro-helpers
  */
 
 namespace PMPro_Helpers;
