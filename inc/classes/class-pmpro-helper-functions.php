@@ -279,4 +279,14 @@ class PMPro_Helper_Functions {
 		</select>
 		<?php
 	}
+
+	public static function get_level_expiration() {
+		$expiration = 'tomorrow';
+		return $expiration;
+	}
+
+	public static function get_member_expiration() {
+		$expiration = 'tomorrow';
+		return $expiration;
+	}
 }

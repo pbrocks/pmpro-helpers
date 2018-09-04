@@ -23,4 +23,5 @@ inc\classes\PMPro_Beta_Temp::init();
 inc\classes\PMPro_Helper_Functions::init();
 inc\classes\PMPro_Primer::init();
 inc\classes\PMPro_Setup_Functions::init();
+// inc\classes\PMPro_Sortable_Members::init();
 inc\classes\PMPro_Tabbed_Settings::init();

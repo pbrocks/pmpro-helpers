@@ -50,7 +50,8 @@ class PMPro_Primer {
 		$screen = get_current_screen();
 		$help_1_id = 'using_pmpro_array';
 		$help_1_title = ucwords( preg_replace( '/_+/', ' ', $help_1_id ) );
-		$sample_output = self::get_sample_pmpro_levels_code();
+		// $sample_output = self::get_sample_pmpro_levels_code();
+		$sample_output = 'placeholder';
 		$sample_description = 'This is a quick sample of what you can do with the code on this page. Copy and paste this into your code to see how it works.';
 		$screen->add_help_tab(
 			array(

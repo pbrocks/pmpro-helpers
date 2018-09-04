@@ -26,7 +26,9 @@ class PMPro_Setup_Functions {
 		add_filter( 'login_redirect', array( __CLASS__, 'pmpro_helpers_login_redirect' ), 10, 3 );
 		remove_action( 'admin_menu', 'pmpro_add_pages' );
 		remove_action( 'admin_menu', 'pmproama_pmpro_add_pages' );
-		add_action( 'admin_menu', 'pmproama_pmpro_add_pages', 15 );
+		remove_action( 'admin_menu', 'pmpro_bp_add_admin_menu_page' );
+		// add_action( 'admin_menu', 'pmpro_bp_add_admin_menu_page', 15 );
+		// add_action( 'admin_menu', 'pmproama_pmpro_add_pages', 15 );
 		add_action( 'admin_menu', array( __CLASS__, 'pmpro_add_pages_priority' ) );
 		// add_action( 'admin_menu', array( __CLASS__, 'pmpro_add_new_menu_priority' ), 15 );
 		add_filter( 'pmpro_menu_title', array( __CLASS__, 'pmpro_change_menu_name' ) );

@@ -23,9 +23,9 @@ class PMPro_Tabbed_Settings {
 	 * @return [type] [description]
 	 */
 	public static function init() {
-		add_action( 'admin_menu', array( __CLASS__, 'pmpro_beta_demo' ) );
-		// add_action( 'init', array( __CLASS__, 'beta_admin_init' ) );
-		// add_action( 'admin_footer', array( __CLASS__, 'beta_diagnostic_message' ) );
+		add_action( 'admin_menu', array( __CLASS__, 'pmpro_tabbed_demo' ) );
+		// add_action( 'init', array( __CLASS__, 'tabbed_admin_init' ) );
+		// add_action( 'admin_footer', array( __CLASS__, 'tabbed_diagnostic_message' ) );
 		// add_filter( 'pmpro_menu_title', array( __CLASS__, 'pmpro_change_menu_name' ) );
 	}
 
@@ -95,12 +95,12 @@ class PMPro_Tabbed_Settings {
 		}
 	}
 
-	public static function pmpro_beta_demo() {
-		global $beta_dash;
+	public static function pmpro_tabbed_demo() {
+		global $tabbed_dash;
 		$slug = preg_replace( '/_+/', '-', __FUNCTION__ );
 		$label = ucwords( preg_replace( '/_+/', ' ', __FUNCTION__ ) );
-		$beta_dash = add_dashboard_page( __( $label, 'pmpro-beta' ), __( $label, 'pmpro-beta' ), 'manage_options', $slug . '.php', array( __CLASS__, 'pmpro_beta_page_demo' ), 'dashicons-groups', 20 );
-		// add_action( "load-{$beta_dash}", array( __CLASS__, 'beta_tabbed_settings' ) );
+		$tabbed_dash = add_dashboard_page( __( $label, 'pmpro-tabbed' ), __( $label, 'pmpro-tabbed' ), 'manage_options', $slug . '.php', array( __CLASS__, 'pmpro_tabbed_page_demo' ), 'dashicons-groups', 20 );
+		// add_action( "load-{$tabbed_dash}", array( __CLASS__, 'pmpro_tabbed_settings_page' ) );
 	}
 
 
@@ -113,7 +113,7 @@ class PMPro_Tabbed_Settings {
 	 *
 	 * @return string
 	 */
-	public static function pmpro_beta_page_demo() {
+	public static function pmpro_tabbed_page_demo() {
 		global $pmpro_levels;
 		echo '<div class="wrap">';
 		echo '<h2>' . ucwords( preg_replace( '/_+/', ' ', __FUNCTION__ ) ) . '</h2>';
@@ -121,8 +121,8 @@ class PMPro_Tabbed_Settings {
 		echo '<h4 style="color:rgba(250,128,114,.7);">Current Screen is <span style="color:rgba(250,128,114,1);">' . $screen->id . '</span></h4>';
 
 		// Let's grab the tabs that we created in the `tabbed-settings.php`
-		// beta_admin_tabs( $current = 'homepage' );
-		self::beta_tabbed_settings();
+		// tabbed_admin_tabs( $current = 'homepage' );
+		self::pmpro_tabbed_settings_page();
 		$this_theme = wp_get_theme();
 		echo '<h4>Theme is ' . sprintf(
 			__( '%1$s and is version %2$s', 'text-domain' ),
@@ -137,23 +137,23 @@ class PMPro_Tabbed_Settings {
 		echo '</pre>';
 		echo '</div>';
 	}
-	public static function beta_admin_init() {
-		$beta_settings = get_option( 'beta_tabbed_settings' );
-		if ( empty( $beta_settings ) ) {
-			$beta_settings = array(
-				'beta_intro' => 'Some intro text for the home page',
-				'beta_tag_class' => false,
-				'beta_code' => false,
+	public static function tabbed_admin_init() {
+		$tabbed_settings = get_option( 'pmpro_tabbed_settings' );
+		if ( empty( $tabbed_settings ) ) {
+			$tabbed_settings = array(
+				'tabbed_intro' => 'Some intro text for the home page',
+				'tabbed_tag_class' => false,
+				'tabbed_code' => false,
 			);
-			add_option( 'beta_tabbed_settings', $beta_settings, '', 'yes' );
+			add_option( 'pmpro_tabbed_settings', $tabbed_settings, '', 'yes' );
 		}
 	}
 
 
-	public static function beta_save_theme_settings() {
+	public static function tabbed_save_theme_settings() {
 		global $pagenow;
-		$beta_settings = get_option( 'beta_tabbed_settings' );
-		if ( $pagenow == 'index.php' && $_GET['page'] == 'pmpro-beta-demo.php' ) {
+		$tabbed_settings = get_option( 'pmpro_tabbed_settings' );
+		if ( $pagenow == 'index.php' && $_GET['page'] == 'pmpro-tabbed-demo.php' ) {
 			if ( isset( $_GET['tab'] ) ) {
 				$tab = $_GET['tab'];
 			} else {
@@ -162,30 +162,30 @@ class PMPro_Tabbed_Settings {
 
 			switch ( $tab ) {
 				case 'general':
-					$beta_settings['beta_tag_class']    = $_POST['beta_tag_class'];
+					$tabbed_settings['tabbed_tag_class']    = $_POST['tabbed_tag_class'];
 					break;
 				case 'primer':
-					$beta_settings['beta_code']  = $_POST['beta_code'];
+					$tabbed_settings['tabbed_code']  = $_POST['tabbed_code'];
 					break;
 				case 'homepage':
-					$beta_settings['beta_intro']    = $_POST['beta_intro'];
+					$tabbed_settings['tabbed_intro']    = $_POST['tabbed_intro'];
 					break;
 			}
 		}
 
 		if ( ! current_user_can( 'unfiltered_html' ) ) {
-			if ( $beta_settings['beta_code'] ) {
-				$beta_settings['beta_code'] = stripslashes( esc_textarea( wp_filter_post_kses( $beta_settings['beta_code'] ) ) );
+			if ( $tabbed_settings['tabbed_code'] ) {
+				$tabbed_settings['tabbed_code'] = stripslashes( esc_textarea( wp_filter_post_kses( $tabbed_settings['tabbed_code'] ) ) );
 			}
-			if ( $beta_settings['beta_intro'] ) {
-				$beta_settings['beta_intro'] = stripslashes( esc_textarea( wp_filter_post_kses( $beta_settings['beta_intro'] ) ) );
+			if ( $tabbed_settings['tabbed_intro'] ) {
+				$tabbed_settings['tabbed_intro'] = stripslashes( esc_textarea( wp_filter_post_kses( $tabbed_settings['tabbed_intro'] ) ) );
 			}
 		}
 
-		$updated = update_option( 'beta_tabbed_settings', $beta_settings );
+		$updated = update_option( 'pmpro_tabbed_settings', $tabbed_settings );
 	}
 
-	public static function beta_diagnostic_message() {
+	public static function tabbed_diagnostic_message() {
 		global $current_user;
 		?>
 		<style type="text/css">
@@ -218,7 +218,7 @@ class PMPro_Tabbed_Settings {
 
 
 
-	public static function beta_admin_tabs( $current = 'homepage' ) {
+	public static function tabbed_admin_tabs( $current = 'homepage' ) {
 		$tabs = array(
 			'homepage' => 'Home',
 			'general' => 'General',
@@ -230,22 +230,22 @@ class PMPro_Tabbed_Settings {
 		echo '<h2 class="nav-tab-wrapper">';
 		foreach ( $tabs as $tab => $name ) {
 			$class = ( $tab == $current ) ? ' nav-tab-active' : '';
-			echo "<a class='nav-tab$class' href='?page=pmpro-beta-demo.php&tab=$tab'>$name</a>";
+			echo "<a class='nav-tab$class' href='?page=pmpro-tabbed-demo.php&tab=$tab'>$name</a>";
 
 		}
 		echo '</h2>';
 	}
 
-	public static function beta_tabbed_settings() {
+	public static function pmpro_tabbed_settings_page() {
 		global $pagenow;
-		$beta_settings = get_option( 'beta_tabbed_settings' );
+		$tabbed_settings = get_option( 'pmpro_tabbed_settings' );
 		// if ( 'true' == esc_attr( $_GET['updated'] ) ) {
 		// echo '<div class="updated" ><p> Settings updated.</p></div>';
 		// }
 		if ( isset( $_GET['tab'] ) ) {
-			self::beta_admin_tabs( $_GET['tab'] );
+			self::tabbed_admin_tabs( $_GET['tab'] );
 		} else {
-			self::beta_admin_tabs( 'homepage' );
+			self::tabbed_admin_tabs( 'homepage' );
 		}
 		?>
 <style type="text/css">
@@ -255,10 +255,10 @@ class PMPro_Tabbed_Settings {
 </style>
 <div id="poststuff">
 	<div class="tab-content-wrapper">
-		<form method="post" action="<?php admin_url( 'index.php?page=pmpro-beta-demo.php' ); ?>">
+		<form method="post" action="<?php admin_url( 'index.php?page=pmpro-tabbed-demo.php' ); ?>">
 			<?php
-			// wp_nonce_field( 'beta-settings-page' );
-			if ( $pagenow == 'index.php' && $_GET['page'] == 'pmpro-beta-demo.php' ) {
+			// wp_nonce_field( 'tabbed-settings-page' );
+			if ( $pagenow == 'index.php' && $_GET['page'] == 'pmpro-tabbed-demo.php' ) {
 
 				if ( isset( $_GET['tab'] ) ) {
 					$tab = $_GET['tab'];
@@ -271,10 +271,10 @@ class PMPro_Tabbed_Settings {
 					case 'general':
 						?>
 						<tr>
-								<?php echo self::pmpro_beta_demo_home(); ?>
-							<th><label for="beta_tag_class">Tags with CSS classes:</label></th>
+								<?php echo self::pmpro_tabbed_demo_home(); ?>
+							<th><label for="tabbed_tag_class">Tags with CSS classes:</label></th>
 							<td>
-								<?php echo self::pmpro_beta_demo_home(); ?>
+								<?php echo self::pmpro_tabbed_demo_home(); ?>
 							</td>
 						</tr>
 						<?php
@@ -282,12 +282,12 @@ class PMPro_Tabbed_Settings {
 					case 'settings':
 						?>
 						<tr>
-							<th><label for="beta_settings">$beta_settings:</label></th>
+							<th><label for="tabbed_settings">$tabbed_settings:</label></th>
 							<td>
-								<?php echo self::pmpro_beta_demo_home(); ?>
+								<?php echo self::pmpro_tabbed_demo_home(); ?>
 							<pre>
 								<?php
-								print_r( $beta_settings );
+								print_r( $tabbed_settings );
 								?>
 							</pre>
 								<br/>
@@ -299,9 +299,9 @@ class PMPro_Tabbed_Settings {
 					case 'primer':
 						?>
 						<tr>
-							<th><label for="beta_code">Insert tracking code:</label></th>
+							<th><label for="tabbed_code">Insert tracking code:</label></th>
 							<td>
-								<textarea id="beta_code" name="beta_code" cols="60" rows="5"><?php echo esc_html( stripslashes( $beta_settings['beta_code'] ) ); ?></textarea><br/>
+								<textarea id="tabbed_code" name="tabbed_code" cols="60" rows="5"><?php echo esc_html( stripslashes( $tabbed_settings['tabbed_code'] ) ); ?></textarea><br/>
 								<span class="description">Enter your Google Analytics tracking code:</span>
 							</td>
 						</tr>
@@ -310,11 +310,11 @@ class PMPro_Tabbed_Settings {
 					case 'homepage':
 						?>
 						<tr>
-							<th><label for="beta_intro"><?php echo $tab; ?></label></th>
+							<th><label for="tabbed_intro"><?php echo $tab; ?></label></th>
 							<td>
-								<?php echo self::pmpro_beta_demo_home(); ?>
+								<?php echo self::pmpro_tabbed_demo_home(); ?>
 
-								<textarea id="beta_intro" name="beta_intro" cols="60" rows="5" ><?php echo esc_html( stripslashes( $beta_settings['beta_intro'] ) ); ?></textarea><br/>
+								<textarea id="tabbed_intro" name="tabbed_intro" cols="60" rows="5" ><?php echo esc_html( stripslashes( $tabbed_settings['tabbed_intro'] ) ); ?></textarea><br/>
 								<span class="description">Enter the introductory text for the home page:</span>
 							</td>
 						</tr>
@@ -326,7 +326,7 @@ class PMPro_Tabbed_Settings {
 			?>
 					<p class="submit" style="clear: both;">
 						<input type="submit" name="Submit"  class="button-primary" value="Update Settings" />
-						<input type="hidden" name="beta-settings-submit" value="Y" />
+						<input type="hidden" name="tabbed-settings-submit" value="Y" />
 					</p>
 			</form>
 		</div>
@@ -337,21 +337,21 @@ class PMPro_Tabbed_Settings {
 	}
 
 	/**
-	 * [pmpro_beta_demo_home description]
+	 * [pmpro_tabbed_demo_home description]
 	 * PMPro_Helpers\inc\classes\PMPro_Primer\pmpro_primer_page();
 	 *
 	 * @return [type] [description]
 	 */
-	public static function pmpro_beta_demo_home() {
+	public static function pmpro_tabbed_demo_home() {
 		echo __FUNCTION__;
 	}
 	/**
-	 * [pmpro_beta_demo_primer description]
+	 * [pmpro_tabbed_demo_primer description]
 	 * PMPro_Helpers\inc\classes\PMPro_Primer\pmpro_primer_page();
 	 *
 	 * @return [type] [description]
 	 */
-	public static function pmpro_beta_demo_primer() {
+	public static function pmpro_tabbed_demo_primer() {
 		echo __FUNCTION__;
 	}
 }
